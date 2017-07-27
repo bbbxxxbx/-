@@ -7,6 +7,8 @@
 //
 
 #import "AppDelegate.h"
+#import "ViewController.h"
+#import "ViewController1.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +19,21 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds] ;
+    UITabBarController *tab = [[UITabBarController alloc] init] ;
+    tab.view.backgroundColor = [UIColor whiteColor] ;
+    tab.tabBar.tintColor = [UIColor colorWithRed:254.0/255.0 green:26.0/255.0 blue:26.0/255.0 alpha:1.0] ;
+    ViewController  *v1 = [[ViewController alloc] init] ;
+    UITabBarItem *item1 = [[UITabBarItem alloc] initWithTitle:@"效果一" image:[[UIImage imageNamed:@"icon"]imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal] selectedImage:[[UIImage imageNamed:@"selectedIcon"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]] ;
+    v1.tabBarItem = item1 ;
+    v1.tabBarItem.titlePositionAdjustment = UIOffsetMake(0, -2);
+    ViewController1 *v2 = [[ViewController1 alloc] init] ;
+    UITabBarItem *item2 = [[UITabBarItem alloc] initWithTitle:@"效果二" image:[[UIImage imageNamed:@"icon"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]  selectedImage:[[UIImage imageNamed:@"selectedIcon"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]] ;
+    v2.tabBarItem = item2 ;
+    v2.tabBarItem.titlePositionAdjustment = UIOffsetMake(0, -2);
+    [tab setViewControllers:@[v1,v2]] ;
+    self.window.rootViewController = tab ;
+    [self.window makeKeyAndVisible] ;
     return YES;
 }
 

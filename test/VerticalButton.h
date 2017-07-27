@@ -10,4 +10,7 @@
 
 @interface VerticalButton : UIButton
 
+@property (nonatomic, assign) CGFloat spaceBetweenImageTitle ;
+@property (nonatomic, assign) CGSize imageSize ;
+
 @end
