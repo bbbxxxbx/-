@@ -30,7 +30,7 @@
             view.backgroundColor = [UIColor whiteColor] ;
             for(UIView *subView in view.subviews) {
                 if([subView isKindOfClass:[UIButton class]]) {
-                    //删除系统原生的按钮
+                    //找到系统原生的删除按钮并删除
                     [subView removeFromSuperview] ;
                 }
             }
