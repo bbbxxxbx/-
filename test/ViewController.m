@@ -52,7 +52,7 @@
     _tableView.tableHeaderView = tableHeaderView ;
     
     //用一个透明的view将tableView的footer撑开
-    UIView *tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, footerHeight)] ;
+    UIView *tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, footerHeight/2)] ;
     tableHeaderView.backgroundColor = [UIColor clearColor] ;
     _tableView.tableFooterView = tableFooterView ;
 
@@ -61,7 +61,13 @@
     
     //再在header下方添加一个刷新用的view
     _refreshHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, headerHeight - 50, [UIScreen mainScreen].bounds.size.width , 50)] ;
-    _refreshHeaderView.backgroundColor = [UIColor blueColor] ;
+    _refreshHeaderView.backgroundColor = [UIColor whiteColor] ;
+    UILabel *tip = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 50)] ;
+    tip.text = @"刷新动画" ;
+    tip.textColor = [UIColor blackColor] ;
+    tip.font = [UIFont systemFontOfSize:14] ;
+    tip.textAlignment = NSTextAlignmentCenter ;
+    [_refreshHeaderView addSubview:tip] ;
     [_tableView.tableHeaderView addSubview:_refreshHeaderView] ;
     
     
