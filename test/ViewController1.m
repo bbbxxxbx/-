@@ -11,7 +11,7 @@
 @interface ViewController1 ()<UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, strong) UITableView *tableView ;
-@property (nonatomic, strong) UIView *refreshHeaderView ;
+@property (nonatomic, strong) UIView *refreshView ;
 @property (nonatomic, strong) UIView *fixedView ;
 @property (nonatomic, strong) UIView *movedView ;
 
@@ -42,9 +42,9 @@
     
     _tableView.scrollIndicatorInsets = UIEdgeInsetsMake(headerHeight, 0, 0, 0) ;
     
-    _refreshHeaderView = [[UIView alloc]initWithFrame:CGRectMake(0, headerHeight - 50, [UIScreen mainScreen].bounds.size.width, 50)] ;
-    _refreshHeaderView.backgroundColor = [UIColor blueColor] ;
-    [_tableView.tableHeaderView addSubview:_refreshHeaderView] ;
+    _refreshView = [[UIView alloc]initWithFrame:CGRectMake(0, headerHeight - 50, [UIScreen mainScreen].bounds.size.width, 50)] ;
+    _refreshView.backgroundColor = [UIColor blueColor] ;
+    [_tableView.tableHeaderView addSubview:_refreshView] ;
     
     _movedView = [[UIView alloc] initWithFrame:CGRectMake(0, fixedHeight, [UIScreen mainScreen].bounds.size.width, headerHeight - fixedHeight)] ;
     _movedView.backgroundColor = [UIColor redColor] ;
