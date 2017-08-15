@@ -22,7 +22,7 @@
 
 @end
 
-#define headerHeight 250
+#define movedHeight 200
 #define fixedHeight  110
 #define tabBarHeight 49
 
@@ -36,17 +36,17 @@
     _tableView.dataSource = self ;
     [self.view addSubview:_tableView] ;
     
-    UIView *tablHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, headerHeight)] ;
+    UIView *tablHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, movedHeight + fixedHeight)] ;
     tablHeaderView.backgroundColor = [UIColor clearColor] ;
     _tableView.tableHeaderView = tablHeaderView ;
     
-    _tableView.scrollIndicatorInsets = UIEdgeInsetsMake(headerHeight, 0, 0, 0) ;
+    _tableView.scrollIndicatorInsets = UIEdgeInsetsMake(movedHeight + fixedHeight, 0, 0, 0) ;
     
-    _refreshView = [[UIView alloc]initWithFrame:CGRectMake(0, headerHeight - 50, [UIScreen mainScreen].bounds.size.width, 50)] ;
+    _refreshView = [[UIView alloc]initWithFrame:CGRectMake(0, movedHeight + fixedHeight - 50, [UIScreen mainScreen].bounds.size.width, 50)] ;
     _refreshView.backgroundColor = [UIColor blueColor] ;
     [_tableView.tableHeaderView addSubview:_refreshView] ;
     
-    _movedView = [[UIView alloc] initWithFrame:CGRectMake(0, fixedHeight, [UIScreen mainScreen].bounds.size.width, headerHeight - fixedHeight)] ;
+    _movedView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, movedHeight + fixedHeight)] ;
     _movedView.backgroundColor = [UIColor redColor] ;
     [_tableView addSubview:_movedView] ;
     
@@ -75,7 +75,7 @@
     
     //小按钮模块
     _smallItems = [NSMutableArray array] ;
-    CGFloat smallSpace = ([UIScreen mainScreen].bounds.size.width-37*2-25*4)/3.0 ;
+    CGFloat smallSpace = ([UIScreen mainScreen].bounds.size.width*2/3-37*2-25*3)/2.0 ;
     UIView *smallItem1 = [[UIView alloc] initWithFrame:CGRectMake(37, 20, 25, 25)] ;
     smallItem1.backgroundColor = [UIColor blueColor] ;
     [_smallItems addObject:smallItem1] ;
@@ -91,10 +91,6 @@
     [_smallItems addObject:smallItem3] ;
     [_fixedView addSubview:smallItem3] ;
     
-    UIView *smallItem4 = [[UIView alloc] initWithFrame:CGRectMake(37+25+smallSpace+25+smallSpace+25+smallSpace, 20, 25, 25)] ;
-    smallItem4.backgroundColor = [UIColor blueColor] ;
-    [_smallItems addObject:smallItem4] ;
-    [_fixedView addSubview:smallItem4] ;
     [self adjustItems:_smallItems alpha:0.0] ;
 
 }
@@ -116,11 +112,11 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 30 ;
+    return 20 ;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 30 ;
+    return 50 ;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -137,7 +133,7 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     CGFloat tableViewOffSetY = scrollView.contentOffset.y ;
     if(tableViewOffSetY >= 0) {
-        _movedView.frame = CGRectMake(0, fixedHeight, [UIScreen mainScreen].bounds.size.width, headerHeight - fixedHeight) ;
+        _movedView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, movedHeight + fixedHeight) ;
         if(tableViewOffSetY <= fixedHeight/2) {
             CGRect frame = _fixedView.frame ;
             CGFloat height = fixedHeight - tableViewOffSetY ;
@@ -158,7 +154,7 @@
         }
     }
     else {
-        _movedView.frame = CGRectMake(0, tableViewOffSetY + fixedHeight, [UIScreen mainScreen].bounds.size.width, headerHeight - fixedHeight) ;
+        _movedView.frame = CGRectMake(0, tableViewOffSetY, [UIScreen mainScreen].bounds.size.width, movedHeight + fixedHeight) ;
         
         _fixedView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, fixedHeight) ;
         [self adjustItems:_bigItems alpha:1.0] ;
