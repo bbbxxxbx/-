@@ -23,7 +23,8 @@
 @end
 
 #define movedHeight 200
-#define fixedHeight  110
+#define fixedNormalHeight 100
+#define fixedSmallHeight 50
 #define tabBarHeight 49
 
 @implementation ViewController1
@@ -36,21 +37,21 @@
     _tableView.dataSource = self ;
     [self.view addSubview:_tableView] ;
     
-    UIView *tablHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, movedHeight + fixedHeight)] ;
+    UIView *tablHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, movedHeight + fixedNormalHeight)] ;
     tablHeaderView.backgroundColor = [UIColor clearColor] ;
     _tableView.tableHeaderView = tablHeaderView ;
     
-    _tableView.scrollIndicatorInsets = UIEdgeInsetsMake(movedHeight + fixedHeight, 0, 0, 0) ;
+    _tableView.scrollIndicatorInsets = UIEdgeInsetsMake(movedHeight + fixedNormalHeight, 0, 0, 0) ;
     
-    _refreshView = [[UIView alloc]initWithFrame:CGRectMake(0, movedHeight + fixedHeight - 50, [UIScreen mainScreen].bounds.size.width, 50)] ;
+    _refreshView = [[UIView alloc]initWithFrame:CGRectMake(0, movedHeight + fixedNormalHeight - 50, [UIScreen mainScreen].bounds.size.width, 50)] ;
     _refreshView.backgroundColor = [UIColor blueColor] ;
     [_tableView.tableHeaderView addSubview:_refreshView] ;
     
-    _movedView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, movedHeight + fixedHeight)] ;
+    _movedView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, movedHeight + fixedNormalHeight)] ;
     _movedView.backgroundColor = [UIColor redColor] ;
     [_tableView addSubview:_movedView] ;
     
-    _fixedView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, fixedHeight)] ;
+    _fixedView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, fixedNormalHeight)] ;
     _fixedView.backgroundColor = [UIColor yellowColor] ;
     [self.view addSubview:_fixedView] ;
  
@@ -58,17 +59,17 @@
     _bigItems = [NSMutableArray array] ;
     CGFloat bigSpace = ([UIScreen mainScreen].bounds.size.width-53*2-50*3)/2.0 ;
     
-    UIView *bigItem1 = [[UIView alloc] initWithFrame:CGRectMake(53,40,50,50)] ;
+    UIView *bigItem1 = [[UIView alloc] initWithFrame:CGRectMake(53,30,50,50)] ;
     bigItem1.backgroundColor = [UIColor blueColor] ;
     [_bigItems addObject:bigItem1] ;
     [_fixedView addSubview:bigItem1] ;
     
-    UIView *bigItem2 = [[UIView alloc] initWithFrame:CGRectMake(53+50+bigSpace,40,50,50)] ;
+    UIView *bigItem2 = [[UIView alloc] initWithFrame:CGRectMake(53+50+bigSpace,30,50,50)] ;
     bigItem2.backgroundColor = [UIColor blueColor] ;
     [_bigItems addObject:bigItem2] ;
     [_fixedView addSubview:bigItem2] ;
     
-    UIView *bigItem3 = [[UIView alloc] initWithFrame:CGRectMake(53+50+bigSpace+50+bigSpace,40,50,50)] ;
+    UIView *bigItem3 = [[UIView alloc] initWithFrame:CGRectMake(53+50+bigSpace+50+bigSpace,30,50,50)] ;
     bigItem3.backgroundColor = [UIColor blueColor] ;
     [_bigItems addObject:bigItem3] ;
     [_fixedView addSubview:bigItem3] ;
@@ -133,30 +134,30 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     CGFloat tableViewOffSetY = scrollView.contentOffset.y ;
     if(tableViewOffSetY >= 0) {
-        _movedView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, movedHeight + fixedHeight) ;
-        if(tableViewOffSetY <= fixedHeight/2) {
+        _movedView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, movedHeight + fixedNormalHeight) ;
+        if(tableViewOffSetY <= (fixedNormalHeight-fixedSmallHeight)) {
             CGRect frame = _fixedView.frame ;
-            CGFloat height = fixedHeight - tableViewOffSetY ;
+            CGFloat height = fixedNormalHeight - tableViewOffSetY ;
             frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, height) ;
             _fixedView.frame = frame ;
             
-            //大图标透明度改变的位移范围为0～25，小图标透明度改变的位移范围为20～55
-            CGFloat bigAlpha = tableViewOffSetY<25?(1.0-tableViewOffSetY/25.0):0.0 ;
-            CGFloat smallAlpha = tableViewOffSetY>20?(tableViewOffSetY-20)/35:0.0 ;
+            //大图标透明度改变的位移范围为(0～0.25)*fixedNormalHeight，小图标透明度改变的位移范围为0.2*fixedNormalHeight～(fixedNormalHeight-fixedSmallHeight)
+            CGFloat bigAlpha = tableViewOffSetY<(0.25*fixedNormalHeight)?(1.0-tableViewOffSetY/(0.25*fixedNormalHeight)):0.0 ;
+            CGFloat smallAlpha = tableViewOffSetY>(0.2*fixedNormalHeight)?(tableViewOffSetY-0.2*fixedNormalHeight)/(fixedNormalHeight-fixedSmallHeight-0.2*fixedNormalHeight):0.0 ;
             [self adjustItems:_bigItems alpha:bigAlpha] ;
             [self adjustItems:_smallItems alpha:smallAlpha] ;
             
         }
         else {
-            _fixedView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, fixedHeight/2) ;
+            _fixedView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, fixedSmallHeight) ;
             [self adjustItems:_bigItems alpha:0.0] ;
             [self adjustItems:_smallItems alpha:1.0] ;
         }
     }
     else {
-        _movedView.frame = CGRectMake(0, tableViewOffSetY, [UIScreen mainScreen].bounds.size.width, movedHeight + fixedHeight) ;
+        _movedView.frame = CGRectMake(0, tableViewOffSetY, [UIScreen mainScreen].bounds.size.width, movedHeight + fixedNormalHeight) ;
         
-        _fixedView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, fixedHeight) ;
+        _fixedView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, fixedNormalHeight) ;
         [self adjustItems:_bigItems alpha:1.0] ;
         [self adjustItems:_smallItems alpha:0.0] ;
         
@@ -170,11 +171,11 @@
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     if(!decelerate) {
         if(scrollView.contentOffset.y >= 0) {
-            if(scrollView.contentOffset.y < fixedHeight/4) {
+            if(scrollView.contentOffset.y < fixedSmallHeight*0.5) {
                 [scrollView setContentOffset:CGPointMake(0, 0) animated:YES] ;
             }
-            else if(scrollView.contentOffset.y < fixedHeight/2) {
-                [scrollView setContentOffset:CGPointMake(0, fixedHeight/2) animated:YES] ;
+            else if(scrollView.contentOffset.y < fixedSmallHeight) {
+                [scrollView setContentOffset:CGPointMake(0, fixedSmallHeight) animated:YES] ;
             }
         }
     }
@@ -182,11 +183,11 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     if(scrollView.contentOffset.y >= 0) {
-        if(scrollView.contentOffset.y < fixedHeight/4) {
+        if(scrollView.contentOffset.y < fixedSmallHeight*0.5) {
             [scrollView setContentOffset:CGPointMake(0, 0) animated:YES] ;
         }
-        else if(scrollView.contentOffset.y < fixedHeight/2) {
-            [scrollView setContentOffset:CGPointMake(0, fixedHeight/2) animated:YES] ;
+        else if(scrollView.contentOffset.y < fixedSmallHeight) {
+            [scrollView setContentOffset:CGPointMake(0, fixedSmallHeight) animated:YES] ;
         }
     }
 }

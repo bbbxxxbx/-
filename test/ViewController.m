@@ -26,7 +26,8 @@
 @end
 
 #define movedHeight 200
-#define fixedHeight 110
+#define fixedNormalHeight 100
+#define fixedSmallHeight 55
 #define tabBarHeight 49
 
 @implementation ViewController
@@ -52,7 +53,7 @@
     _tableView.tableHeaderView = tableHeaderView ;
     
     //用一个透明的view将tableView的footer撑开
-    UIView *tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, fixedHeight/2)] ;
+    UIView *tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, fixedSmallHeight)] ;
     tableHeaderView.backgroundColor = [UIColor clearColor] ;
     _tableView.tableFooterView = tableFooterView ;
 
@@ -78,7 +79,7 @@
     [self.tableView addSubview:_movedView] ;
     [self.tableView bringSubviewToFront:_movedView] ;
 
-    _fixedView = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - tabBarHeight - fixedHeight, [UIScreen mainScreen].bounds.size.width, fixedHeight)] ;
+    _fixedView = [[UIView alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height - tabBarHeight - fixedNormalHeight, [UIScreen mainScreen].bounds.size.width, fixedNormalHeight)] ;
     _fixedView.backgroundColor = [UIColor yellowColor] ;
     [self.view addSubview:_fixedView] ;
     
@@ -86,17 +87,17 @@
     _bigItems = [NSMutableArray array] ;
     CGFloat bigSpace = ([UIScreen mainScreen].bounds.size.width-53*2-50*3)/2.0 ;
     
-    VerticalButton *bigItem1 = [self addBigItemWithFrame:CGRectMake(53,30,50,fixedHeight-30*2) image:[UIImage imageNamed:@"付款码"] title:@"付款码"] ;
+    VerticalButton *bigItem1 = [self addBigItemWithFrame:CGRectMake(53,30,50,fixedNormalHeight-30*2) image:[UIImage imageNamed:@"付款码"] title:@"付款码"] ;
     bigItem1.tag = 100 ;
     [_bigItems addObject:bigItem1] ;
     [_fixedView addSubview:bigItem1] ;
     
-    VerticalButton *bigItem2 = [self addBigItemWithFrame:CGRectMake(53+50+bigSpace,30,50,fixedHeight-30*2) image:[UIImage imageNamed:@"扫一扫"] title:@"扫一扫"] ;
+    VerticalButton *bigItem2 = [self addBigItemWithFrame:CGRectMake(53+50+bigSpace,30,50,fixedNormalHeight-30*2) image:[UIImage imageNamed:@"扫一扫"] title:@"扫一扫"] ;
     bigItem2.tag = 101 ;
     [_bigItems addObject:bigItem2] ;
     [_fixedView addSubview:bigItem2] ;
     
-    VerticalButton *bigItem3 = [self addBigItemWithFrame:CGRectMake(53+50+bigSpace+50+bigSpace,30,50,fixedHeight-30*2) image:[UIImage imageNamed:@"转账"] title:@"转账"] ;
+    VerticalButton *bigItem3 = [self addBigItemWithFrame:CGRectMake(53+50+bigSpace+50+bigSpace,30,50,fixedNormalHeight-30*2) image:[UIImage imageNamed:@"转账"] title:@"转账"] ;
     bigItem3.tag = 102 ;
     [_bigItems addObject:bigItem3] ;
     [_fixedView addSubview:bigItem3] ;
@@ -105,17 +106,17 @@
     _smallItems = [NSMutableArray array] ;
     CGFloat smallSpace = ([UIScreen mainScreen].bounds.size.width*2/3-37*2-25*3)/2.0 ;
 
-    UIButton *smallItem1 = [self addSmallItemWithFrame:CGRectMake(37, 15, 25, fixedHeight/2-15*2) image:[UIImage imageNamed:@"付款码"]] ;
+    UIButton *smallItem1 = [self addSmallItemWithFrame:CGRectMake(37, 15+(fixedNormalHeight-fixedSmallHeight), 25, fixedSmallHeight-15*2) image:[UIImage imageNamed:@"付款码"]] ;
     smallItem1.tag = 100 ;
     [_smallItems addObject:smallItem1] ;
     [_fixedView addSubview:smallItem1] ;
     
-    UIButton *smallItem2 = [self addSmallItemWithFrame:CGRectMake(37+25+smallSpace, 15, 25, fixedHeight/2-15*2) image:[UIImage imageNamed:@"扫一扫"]] ;
+    UIButton *smallItem2 = [self addSmallItemWithFrame:CGRectMake(37+25+smallSpace, 15+(fixedNormalHeight-fixedSmallHeight), 25, fixedSmallHeight-15*2) image:[UIImage imageNamed:@"扫一扫"]] ;
     smallItem2.tag = 101 ;
     [_smallItems addObject:smallItem2] ;
     [_fixedView addSubview:smallItem2] ;
     
-    UIButton *smallItem3 = [self addSmallItemWithFrame:CGRectMake(37+25+smallSpace+25+smallSpace, 15, 25, fixedHeight/2-15*2) image:[UIImage imageNamed:@"转账"]] ;
+    UIButton *smallItem3 = [self addSmallItemWithFrame:CGRectMake(37+25+smallSpace+25+smallSpace, 15+(fixedNormalHeight-fixedSmallHeight), 25, fixedSmallHeight-15*2) image:[UIImage imageNamed:@"转账"]] ;
     smallItem3.tag = 102 ;
     [_smallItems addObject:smallItem3] ;
     [_fixedView addSubview:smallItem3] ;
@@ -188,27 +189,27 @@
         //当滑动的offset大于等于0时,movedView随tableView滑动
         _movedView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, movedHeight) ;
         //fixedView处理
-        if(tableViewoffsetY <= fixedHeight/2) {
+        if(tableViewoffsetY <= (fixedNormalHeight-fixedSmallHeight)) {
             CGRect frame = _fixedView.frame ;
-            CGFloat height = fixedHeight - tableViewoffsetY ;
+            CGFloat height = fixedNormalHeight - tableViewoffsetY ;
             frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height-tabBarHeight-height, [UIScreen mainScreen].bounds.size.width, height) ;
             _fixedView.frame = frame ;
             
-            //大图标透明度改变的位移范围为0～25，小图标透明度改变的位移范围为20～55
-            CGFloat bigAlpha = tableViewoffsetY<25?(1.0-tableViewoffsetY/25.0):0.0 ;
-            CGFloat smallAlpha = tableViewoffsetY>20?(tableViewoffsetY-20)/35:0.0 ;
+            //大图标透明度改变的位移范围为(0～0.25)*fixedNormalHeight，小图标透明度改变的位移范围为0.2*fixedNormalHeight~(fixedNormalHeight-fixedSmallHeight)
+            CGFloat bigAlpha = tableViewoffsetY<(0.25*fixedNormalHeight)?(1.0-tableViewoffsetY/(0.25*fixedNormalHeight)):0.0 ;
+            CGFloat smallAlpha = tableViewoffsetY>(0.2*fixedNormalHeight)?(tableViewoffsetY-0.2*fixedNormalHeight)/(fixedNormalHeight-fixedSmallHeight-0.2*fixedNormalHeight):0.0 ;
             [self adjustItems:_bigItems alpha:bigAlpha] ;
             [self adjustItems:_smallItems alpha:smallAlpha] ;
             
             //滑动过程中保证小图标位置不变
             [_smallItems enumerateObjectsUsingBlock:^(UIButton *item, NSUInteger idx, BOOL * _Nonnull stop) {
                 CGRect smallFrame = item.frame ;
-                smallFrame.origin.y = 15 + fixedHeight/2 - tableViewoffsetY ;
+                smallFrame.origin.y = 15 + (fixedNormalHeight-fixedSmallHeight) - tableViewoffsetY ;
                 item.frame = smallFrame ;
             }] ;
         }
         else {
-            _fixedView.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height-tabBarHeight-fixedHeight/2, [UIScreen mainScreen].bounds.size.width, fixedHeight/2) ;
+            _fixedView.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height-tabBarHeight-fixedSmallHeight, [UIScreen mainScreen].bounds.size.width, fixedSmallHeight) ;
             
             [_smallItems enumerateObjectsUsingBlock:^(UIButton *item, NSUInteger idx, BOOL * _Nonnull stop) {
                 CGRect smallFrame = item.frame ;
@@ -227,7 +228,7 @@
         */
         _movedView.frame = CGRectMake(0, tableViewoffsetY, [UIScreen mainScreen].bounds.size.width, movedHeight) ;
         //fixedView保持不变
-        _fixedView.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height - tabBarHeight - fixedHeight, [UIScreen mainScreen].bounds.size.width, fixedHeight) ;
+        _fixedView.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height - tabBarHeight - fixedNormalHeight, [UIScreen mainScreen].bounds.size.width, fixedNormalHeight) ;
         [self adjustItems:_bigItems alpha:1.0] ;
         [self adjustItems:_smallItems alpha:0.0] ;
         
@@ -242,11 +243,11 @@
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     if(!decelerate) {
         if(scrollView.contentOffset.y >= 0) {
-            if(scrollView.contentOffset.y < fixedHeight/4) {
+            if(scrollView.contentOffset.y < fixedSmallHeight*0.5) {
                 [scrollView setContentOffset:CGPointMake(0, 0) animated:YES] ;
             }
-            else if(scrollView.contentOffset.y < fixedHeight/2) {
-                [scrollView setContentOffset:CGPointMake(0, fixedHeight/2) animated:YES] ;
+            else if(scrollView.contentOffset.y < fixedSmallHeight) {
+                [scrollView setContentOffset:CGPointMake(0, fixedSmallHeight) animated:YES] ;
             }
         }
     }
@@ -254,11 +255,11 @@
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     if(scrollView.contentOffset.y >= 0) {
-        if(scrollView.contentOffset.y < fixedHeight/4) {
+        if(scrollView.contentOffset.y < fixedSmallHeight*0.5) {
             [scrollView setContentOffset:CGPointMake(0, 0) animated:YES] ;
         }
-        else if(scrollView.contentOffset.y < fixedHeight/2) {
-            [scrollView setContentOffset:CGPointMake(0, fixedHeight/2) animated:YES] ;
+        else if(scrollView.contentOffset.y < fixedSmallHeight) {
+            [scrollView setContentOffset:CGPointMake(0, fixedSmallHeight) animated:YES] ;
         }
     }
 }
