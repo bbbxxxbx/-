@@ -107,7 +107,8 @@ if(tableViewoffsetY<-60 && [scrollView isDecelerating]) {
 ```
 
 ### 其他
-为了在滑动结束后使主功能区要么显示大图标，要么小图标，需要在以下代理方法中进行处理：
+* 为了在滑动结束后使主功能区要么显示大图标，要么小图标，需要在以下代理方法中进行处理：
+
 ```
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     if(!decelerate) {
@@ -134,5 +135,6 @@ if(tableViewoffsetY<-60 && [scrollView isDecelerating]) {
 }
 ```
 
-
+* 自定义按钮：图标和标题竖直排列
+* 自定义删除按钮
 
