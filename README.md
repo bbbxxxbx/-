@@ -136,5 +136,8 @@ if(tableViewoffsetY<-60 && [scrollView isDecelerating]) {
 ```
 
 * 自定义按钮：图标和标题竖直排列
-* 自定义删除按钮
+* 自定义cell删除按钮的样式
+	1. 重写UITableViewCell的`- (void)layoutSubviews;`方法
+	2. 通过遍历subViews的方式找到系统原生的删除页面 
+	3. 删除原生页面上的删除按钮，并添加自定义样式的删除按钮
 
