@@ -7,6 +7,7 @@
 //
 
 #import "ViewController1.h"
+#import "CustomDeleteTableViewCell1.h"
 
 @interface ViewController1 ()<UITableViewDelegate, UITableViewDataSource>
 
@@ -35,6 +36,7 @@
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - tabBarHeight) style:UITableViewStylePlain] ;
     _tableView.delegate = self ;
     _tableView.dataSource = self ;
+    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone ;
     [self.view addSubview:_tableView] ;
     
     UIView *tablHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, movedHeight + fixedNormalHeight)] ;
@@ -117,18 +119,18 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 50 ;
+    return CellHeight ;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *cellIdentifier = @"cellIdentifier" ;
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier] ;
-    if(cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier] ;
-        cell.selectionStyle = UITableViewCellSelectionStyleBlue ;
-    }
-    cell.textLabel.text = [NSString stringWithFormat:@"%ld", indexPath.row] ;
-    return cell ;
+    return [CustomDeleteTableViewCell1 cellWithTableView:_tableView] ;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    CustomDeleteTableViewCell1 *cell = (CustomDeleteTableViewCell1 *)[tableView cellForRowAtIndexPath:indexPath] ;
+    [cell clickWithCompletion:^{
+        NSLog(@"%ld",(long)indexPath.row) ;
+    }] ;
 }
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {

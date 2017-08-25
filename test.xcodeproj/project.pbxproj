@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4803EC701F4FFB6000D691D9 /* CustomScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4803EC6F1F4FFB6000D691D9 /* CustomScrollView.m */; };
+		4803EC791F4FFD6500D691D9 /* CustomDeleteTableViewCell1.m in Sources */ = {isa = PBXBuildFile; fileRef = 4803EC781F4FFD6500D691D9 /* CustomDeleteTableViewCell1.m */; };
 		480925ED1EF7992B003BFFC7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 480925EC1EF7992B003BFFC7 /* main.m */; };
 		480925F01EF7992B003BFFC7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 480925EF1EF7992B003BFFC7 /* AppDelegate.m */; };
 		480925F31EF7992B003BFFC7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 480925F21EF7992B003BFFC7 /* ViewController.m */; };
@@ -44,6 +46,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4803EC6E1F4FFB6000D691D9 /* CustomScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomScrollView.h; sourceTree = "<group>"; };
+		4803EC6F1F4FFB6000D691D9 /* CustomScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomScrollView.m; sourceTree = "<group>"; };
+		4803EC771F4FFD6500D691D9 /* CustomDeleteTableViewCell1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomDeleteTableViewCell1.h; sourceTree = "<group>"; };
+		4803EC781F4FFD6500D691D9 /* CustomDeleteTableViewCell1.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomDeleteTableViewCell1.m; sourceTree = "<group>"; };
 		480925E81EF7992B003BFFC7 /* test.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = test.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		480925EC1EF7992B003BFFC7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		480925EE1EF7992B003BFFC7 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -133,8 +139,12 @@
 				482040D31F218B3E000AA98A /* VerticalButton.m */,
 				487132771F28642600D8F63D /* CustomDeleteTableViewCell.h */,
 				487132781F28642600D8F63D /* CustomDeleteTableViewCell.m */,
+				4803EC771F4FFD6500D691D9 /* CustomDeleteTableViewCell1.h */,
+				4803EC781F4FFD6500D691D9 /* CustomDeleteTableViewCell1.m */,
 				48181F261F261BAE00CA0596 /* NSString+NSStringAddition.h */,
 				48181F271F261BAE00CA0596 /* NSString+NSStringAddition.m */,
+				4803EC6E1F4FFB6000D691D9 /* CustomScrollView.h */,
+				4803EC6F1F4FFB6000D691D9 /* CustomScrollView.m */,
 				48181F3B1F262FDB00CA0596 /* selectedIcon.png */,
 				48181F391F262FD400CA0596 /* icon.png */,
 				48181F471F26324800CA0596 /* 付款码.png */,
@@ -318,11 +328,13 @@
 			files = (
 				48B2159D1F1F6F4800562BD8 /* ViewController1.m in Sources */,
 				482040D41F218B3E000AA98A /* VerticalButton.m in Sources */,
+				4803EC701F4FFB6000D691D9 /* CustomScrollView.m in Sources */,
 				487132791F28642600D8F63D /* CustomDeleteTableViewCell.m in Sources */,
 				480925F31EF7992B003BFFC7 /* ViewController.m in Sources */,
 				48181F281F261BAE00CA0596 /* NSString+NSStringAddition.m in Sources */,
 				480925F01EF7992B003BFFC7 /* AppDelegate.m in Sources */,
 				480925ED1EF7992B003BFFC7 /* main.m in Sources */,
+				4803EC791F4FFD6500D691D9 /* CustomDeleteTableViewCell1.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
