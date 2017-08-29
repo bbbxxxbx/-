@@ -69,20 +69,19 @@ static const CGFloat margin = 15.0 ;
 
 
 - (void)deleteCell {
-    NSLog(@"deleteCell") ;
     if ([self.delegate respondsToSelector:@selector(cellDeletebuttonClickedWithCell:)]) {
         [self.delegate cellDeletebuttonClickedWithCell:self] ;
     }
 }
 
 - (void)clickWithCompletion:(void(^)(void))completion {
+    _model.showDeleting = NO ;
     if(_scrollView.contentOffset.x > 0) {
         _scrollView.userInteractionEnabled = NO ;
         [UIView animateWithDuration:0.3 animations:^{
             [_scrollView setContentOffset:CGPointZero] ;
         } completion:^(BOOL finished) {
             _scrollView.userInteractionEnabled = YES ;
-            completion() ;
         }] ;
     }
     else {
@@ -90,6 +89,7 @@ static const CGFloat margin = 15.0 ;
     }
 }
 - (void)hideDeleteBtn {
+    _model.showDeleting = NO ;
     if(_scrollView.contentOffset.x > 0) {
         _scrollView.userInteractionEnabled = NO ;
         [UIView animateWithDuration:0.3 animations:^{
@@ -101,6 +101,7 @@ static const CGFloat margin = 15.0 ;
 }
 
 - (void)showDeleteBtn {
+    _model.showDeleting = YES ;
     _scrollView.userInteractionEnabled = NO ;
     [UIView animateWithDuration:0.2 animations:^{
         [_scrollView setContentOffset:CGPointMake(deleteBtnWidth + margin, 0)] ;
@@ -121,7 +122,7 @@ static const CGFloat margin = 15.0 ;
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     if(!decelerate) {
-        if(scrollView.contentOffset.x > 0) {
+        if(scrollView.contentOffset.x >= 0) {
             if(scrollView.contentOffset.x < (deleteBtnWidth+margin)/2) {
                 [self hideDeleteBtn] ;
             }
@@ -133,7 +134,7 @@ static const CGFloat margin = 15.0 ;
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    if(scrollView.contentOffset.x > 0) {
+    if(scrollView.contentOffset.x >= 0) {
         if(scrollView.contentOffset.x < (deleteBtnWidth+margin)/2) {
             [self hideDeleteBtn] ;
         }
@@ -143,4 +144,13 @@ static const CGFloat margin = 15.0 ;
     }
 }
 
+- (void)setModel:(DeleteModel *)model {
+    _model = model ;
+    if(model.showDeleting) {
+        [_scrollView setContentOffset:CGPointMake(deleteBtnWidth + margin, 0)] ;
+    }
+    else {
+        [_scrollView setContentOffset:CGPointZero] ;
+    }
+}
 @end

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "CustomDeleteTableViewCell.h"
+#import "DeleteModel.h"
 
 #define ScreenWidth [UIScreen mainScreen].bounds.size.width
 #define ScreenHeight [UIScreen mainScreen].bounds.size.height
@@ -16,6 +17,7 @@
 @interface CustomDeleteTableViewCell1 : UITableViewCell
 
 @property (nonatomic, weak) id<deleteButtonClickedDelegate> delegate ;
+@property (nonatomic, strong) DeleteModel *model ;
 
 + (instancetype) cellWithTableView:(UITableView *)tableView ;
 

@@ -9,7 +9,7 @@
 #import "ViewController1.h"
 #import "CustomDeleteTableViewCell1.h"
 
-@interface ViewController1 ()<UITableViewDelegate, UITableViewDataSource>
+@interface ViewController1 ()<UITableViewDelegate, UITableViewDataSource, deleteButtonClickedDelegate>
 
 @property (nonatomic, strong) UITableView *tableView ;
 @property (nonatomic, strong) UIView *refreshView ;
@@ -17,6 +17,7 @@
 @property (nonatomic, strong) UIView *movedView ;
 
 @property (nonatomic, assign) BOOL isRequird ;
+@property (nonatomic, strong) NSMutableArray *data ;
 
 @property (nonatomic, strong) NSMutableArray *smallItems ;
 @property (nonatomic, strong) NSMutableArray *bigItems ;
@@ -32,7 +33,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    _data = [NSMutableArray array] ;
+    for(NSInteger index=0; index<10; index++) {
+        DeleteModel *model = [[DeleteModel alloc] init] ;
+        [_data addObject:model] ;
+    }
+
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - tabBarHeight) style:UITableViewStylePlain] ;
     _tableView.delegate = self ;
     _tableView.dataSource = self ;
@@ -115,7 +122,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 20 ;
+    return _data.count ;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -126,10 +133,22 @@
     return [CustomDeleteTableViewCell1 cellWithTableView:_tableView] ;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    CustomDeleteTableViewCell1 *myCell = (CustomDeleteTableViewCell1 *)cell ;
+    myCell.delegate = self ;
+    DeleteModel *model = [_data objectAtIndex:indexPath.row] ;
+    myCell.model = model ;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     CustomDeleteTableViewCell1 *cell = (CustomDeleteTableViewCell1 *)[tableView cellForRowAtIndexPath:indexPath] ;
     [cell clickWithCompletion:^{
-        NSLog(@"%ld",(long)indexPath.row) ;
+        UIAlertController *alertView = [UIAlertController alertControllerWithTitle:@"提示" message:@"点击了cell" preferredStyle:UIAlertControllerStyleAlert] ;
+        UIAlertAction *alertAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [alertView dismissViewControllerAnimated:YES completion:nil] ;
+        }] ;
+        [alertView addAction:alertAction] ;
+        [self presentViewController:alertView animated:YES completion:nil];
     }] ;
 }
 
@@ -205,4 +224,10 @@
     });
 }
 
+- (void)cellDeletebuttonClickedWithCell:(UITableViewCell *)cell {
+    NSIndexPath *indexPath= [_tableView indexPathForCell:cell] ;
+    [_data removeObjectAtIndex:indexPath.row] ;
+    [_tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade] ;
+    [_tableView bringSubviewToFront:_movedView] ; //防止movedView被tableView的headerView覆盖
+}
 @end

@@ -23,6 +23,7 @@
 		48181F4A1F26324800CA0596 /* 付款码.png in Resources */ = {isa = PBXBuildFile; fileRef = 48181F471F26324800CA0596 /* 付款码.png */; };
 		48181F4B1F26324800CA0596 /* 扫一扫.png in Resources */ = {isa = PBXBuildFile; fileRef = 48181F481F26324800CA0596 /* 扫一扫.png */; };
 		48181F4C1F26324800CA0596 /* 转账.png in Resources */ = {isa = PBXBuildFile; fileRef = 48181F491F26324800CA0596 /* 转账.png */; };
+		4818800C1F55399E007DF9BD /* DeleteModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 4818800B1F55399E007DF9BD /* DeleteModel.m */; };
 		482040D41F218B3E000AA98A /* VerticalButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 482040D31F218B3E000AA98A /* VerticalButton.m */; };
 		487132791F28642600D8F63D /* CustomDeleteTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 487132781F28642600D8F63D /* CustomDeleteTableViewCell.m */; };
 		48B2159D1F1F6F4800562BD8 /* ViewController1.m in Sources */ = {isa = PBXBuildFile; fileRef = 48B2159C1F1F6F4800562BD8 /* ViewController1.m */; };
@@ -73,6 +74,8 @@
 		48181F471F26324800CA0596 /* 付款码.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "付款码.png"; sourceTree = "<group>"; };
 		48181F481F26324800CA0596 /* 扫一扫.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "扫一扫.png"; sourceTree = "<group>"; };
 		48181F491F26324800CA0596 /* 转账.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "转账.png"; sourceTree = "<group>"; };
+		4818800A1F55399E007DF9BD /* DeleteModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeleteModel.h; sourceTree = "<group>"; };
+		4818800B1F55399E007DF9BD /* DeleteModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeleteModel.m; sourceTree = "<group>"; };
 		482040D21F218B3E000AA98A /* VerticalButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticalButton.h; sourceTree = "<group>"; };
 		482040D31F218B3E000AA98A /* VerticalButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VerticalButton.m; sourceTree = "<group>"; };
 		487132771F28642600D8F63D /* CustomDeleteTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomDeleteTableViewCell.h; sourceTree = "<group>"; };
@@ -141,6 +144,8 @@
 				487132781F28642600D8F63D /* CustomDeleteTableViewCell.m */,
 				4803EC771F4FFD6500D691D9 /* CustomDeleteTableViewCell1.h */,
 				4803EC781F4FFD6500D691D9 /* CustomDeleteTableViewCell1.m */,
+				4818800A1F55399E007DF9BD /* DeleteModel.h */,
+				4818800B1F55399E007DF9BD /* DeleteModel.m */,
 				48181F261F261BAE00CA0596 /* NSString+NSStringAddition.h */,
 				48181F271F261BAE00CA0596 /* NSString+NSStringAddition.m */,
 				4803EC6E1F4FFB6000D691D9 /* CustomScrollView.h */,
@@ -326,6 +331,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4818800C1F55399E007DF9BD /* DeleteModel.m in Sources */,
 				48B2159D1F1F6F4800562BD8 /* ViewController1.m in Sources */,
 				482040D41F218B3E000AA98A /* VerticalButton.m in Sources */,
 				4803EC701F4FFB6000D691D9 /* CustomScrollView.m in Sources */,
