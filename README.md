@@ -1,17 +1,22 @@
 # 模仿支付宝首页
+## 效果图
 * 效果一：主功能区在屏幕下方
+![](http://note.youdao.com/yws/public/resource/cabb7d1f36a181acc60f44be2f714a52/xmlnote/WEBRESOURCE37ea512c835795c6c5a3b0628b4e9647/3304)
+
 * 效果二：主功能区在屏幕上方（与支付宝一致）
+![效果二](http://note.youdao.com/yws/public/resource/cabb7d1f36a181acc60f44be2f714a52/xmlnote/WEBRESOURCE36b230c1788d34ce691d66100c193abc/3303)
+
 
 ## 页面组成
 ### 效果一
 * 整个页面主要由三个view构成：
- 	1. tableView：整个页面的基础
- 	2. movedView：副功能区域，位于屏幕上方
- 	3. fixedView：主功能区域，位于屏幕下方
+ 	1. tableView：整个页面的基础（效果图中蓝色部分）
+ 	2. movedView：副功能区域，位于屏幕上方（效果图中红色部分）
+ 	3. fixedView：主功能区域，位于屏幕下方（效果图中黄色部分）
 
 * tableView
-	* headerView由一个透明的、高度与movedView一致的view构成。在headerView上还添加了一个refreshView用于展示刷新效果
-	* footerView由一个透明的、高度是fixedView一半的view构成。主要用来防止fixedView遮挡了tableView的内容
+	* headerView是由一个透明的、高度与movedView一致的view构成。并且在headerView上添加了一个refreshView用于展示刷新效果
+	* footerView是由一个透明的、高度是fixedView一半的view构成。主要是为了防止fixedView遮挡了tableView的内容
 	* 通过设置scrollIndicatorInsets来修改滚动条的位置
 
 * movedView
@@ -28,18 +33,17 @@
 ## 交互效果
 效果一和效果二的交互效果类似，因此以效果一为例。主要交互效果在tableView的代理方法`- (void)scrollViewDidScroll:(UIScrollView *)scrollView; `中实现
 
-### `scrollView.contentOffset.y>=0`
+### 当`scrollView.contentOffset.y>=0`时
 * movedView要随着tableView一起滑动。由于movedView是添加在tableView上的，因此只要保持movedView的frame不变即可实现：
 ```
 _movedView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, movedHeight) ;
 ```
 
 * fixedView的高度、位置与tableView的滑动位置相关
-	* 当`tableViewoffsetY <= (fixedNormalHeight-fixedSmallHeight)`时，fixedView的高度不断减小，位置也不断改变，具体实现如下：
+	* 当`scrollView.contentOffset.y <= (fixedNormalHeight-fixedSmallHeight)`时，fixedView的高度不断减小，位置也不断改变，具体实现如下：
 ```
-CGFloat tableViewoffsetY = scrollView.contentOffset.y ;
 CGRect frame = _fixedView.frame ;
-CGFloat height = fixedNormalHeight - tableViewoffsetY ;
+CGFloat height = fixedNormalHeight - scrollView.contentOffset.y ;
 frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height-tabBarHeight-height, [UIScreen mainScreen].bounds.size.width, height) ;
 _fixedView.frame = frame ;
 ``` 
@@ -49,16 +53,16 @@ _fixedView.frame = frame ;
  _fixedView.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height-tabBarHeight-fixedSmallHeight, [UIScreen mainScreen].bounds.size.width, fixedSmallHeight) ;
 ```
 
-* 当fixedView的高度不断减小时，大图标的alpha值逐渐减小，小图标的alpha值逐渐增大，并且小图标的frame要不断改变，使其相对位置固定：
+* 当fixedView的高度不断减小时，大图标的alpha值逐渐减小，小图标的alpha值逐渐增大，并且小图标的frame要不断改变，保证其在fixedView上的相对位置不变：
 ```
-CGFloat bigAlpha = tableViewoffsetY<(0.25*fixedNormalHeight)?(1.0-tableViewoffsetY/(0.25*fixedNormalHeight)):0.0 ;
-CGFloat smallAlpha = tableViewoffsetY>(0.2*fixedNormalHeight)?(tableViewoffsetY-0.2*fixedNormalHeight)/(fixedNormalHeight-fixedSmallHeight-0.2*fixedNormalHeight):0.0 ;
+CGFloat bigAlpha = scrollView.contentOffset.y<(0.25*fixedNormalHeight)?(1.0-scrollView.contentOffset.y/(0.25*fixedNormalHeight)):0.0 ;
+CGFloat smallAlpha = scrollView.contentOffset.y>(0.2*fixedNormalHeight)?(scrollView.contentOffset.y-0.2*fixedNormalHeight)/(fixedNormalHeight-fixedSmallHeight-0.2*fixedNormalHeight):0.0 ;
 [self adjustItems:_bigItems alpha:bigAlpha] ;
 [self adjustItems:_smallItems alpha:smallAlpha] ;           
 //滑动过程中保证小图标位置不变
 [_smallItems enumerateObjectsUsingBlock:^(UIButton *item, NSUInteger idx, BOOL * _Nonnull stop) {
 		CGRect smallFrame = item.frame ;
-		smallFrame.origin.y = 15 + fixedSmallHeight - tableViewoffsetY ;
+		smallFrame.origin.y = 15 + fixedSmallHeight - scrollView.contentOffset.y ;
 		item.frame = smallFrame ;
 }] ;
 ```
@@ -74,11 +78,11 @@ CGFloat smallAlpha = tableViewoffsetY>(0.2*fixedNormalHeight)?(tableViewoffsetY-
 }] ;
 ```
 
-### `scrollView.contentOffset.y<0`
+### 当`scrollView.contentOffset.y<0`时
 * movedView在屏幕上的位置保持不变。滑动时，虽然tableView的frame.origin.y不会变化，但是tableView的bounds.origin.y会变化，所以tableView上所有子页面相对于tableView父页面的位置就会发生变化。因此为了使movedView固定在屏幕上，需要不断改变movedView的frame.origin.y：
 
 ```
-_movedView.frame = CGRectMake(0, tableViewoffsetY, [UIScreen mainScreen].bounds.size.width, movedHeight) ;
+_movedView.frame = CGRectMake(0, scrollView.contentOffset.y, [UIScreen mainScreen].bounds.size.width, movedHeight) ;
 ```
 * fixedView的高度和位置保持不变，大图标的alpha值为0，小图标的alpha值为1：
 
@@ -89,11 +93,11 @@ _fixedView.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height - tabB
 ```
 
 ### 刷新 
-* 当`scrollView.contentOffset.y>=0`时，刷新控件恰好被movedView遮挡住，不会显示
-* 当`scrollView.contentOffset.y<0`时，movedView固定，刷新控件会显示出来。而当松开手指时就会进行刷新请求。请求的同时会使tableView的contentOffset保持在某一固定值，直到请求结束再恢复：
+* 当`scrollView.contentOffset.y>=0`时，刷新控件恰好被movedView遮挡住，不会显示出来
+* 当`scrollView.contentOffset.y<0`时，movedView固定住，刷新控件就会显示出来。而当松开手指时就会进行刷新请求。请求的同时会使tableView的contentOffset保持在某一固定值，直到请求结束再恢复：
 
 ```
-if(tableViewoffsetY<-60 && [scrollView isDecelerating]) {
+if(scrollView.contentOffset.y<-60 && [scrollView isDecelerating]) {
 	[self requird] ;
 	[self.tableView setContentOffset:CGPointMake(0, -50) animated:YES] ;
 }
@@ -135,15 +139,16 @@ if(tableViewoffsetY<-60 && [scrollView isDecelerating]) {
 }
 ```
 
-* 自定义按钮：图标和标题竖直排列
-* 自定义UITableViewCell删除按钮的样式
-	1. 方式一
-		1. 重写UITableViewCell的`- (void)layoutSubviews;`方法
-		2. 通过遍历subViews的方式找到系统原生的删除页面 
-		3. 删除原生页面上的删除按钮，并添加自定义样式的删除按钮
-	2. 方式二  
-		1. 在UITableViewCell的contentView上添加scrollView，并在scrollView上添加控件和删除按钮
-		2. 通过scrollView的代理方法来处理删除按钮的显示和隐藏	
+
+# UITableViewCell删除按钮样式自定义
+## 方式一
+1. 重写UITableViewCell的`- (void)layoutSubviews;`方法
+2. 通过遍历subViews的方式找到系统原生的删除页面 
+3. 删除原生页面上的删除按钮，并添加自定义样式的删除按钮
+
+## 方式二  
+1. 在UITableViewCell的contentView上添加scrollView，并在scrollView上添加控件和删除按钮
+2. 通过scrollView的代理方法来处理删除按钮的显示和隐藏	
 	
 
 

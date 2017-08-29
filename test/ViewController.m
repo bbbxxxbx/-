@@ -29,6 +29,7 @@
 #define fixedNormalHeight 100
 #define fixedSmallHeight 55
 #define tabBarHeight 49
+#define statusBarHeight 20
 
 @implementation ViewController
 
@@ -41,7 +42,7 @@
         [_data addObject:@(index)] ;
     }
     
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - tabBarHeight) style:UITableViewStylePlain] ;
+    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, statusBarHeight, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - tabBarHeight) style:UITableViewStylePlain] ;
     _tableView.delegate = self ;
     _tableView.dataSource = self ;
     _tableView.bounces = YES ;
