@@ -1,5 +1,7 @@
 # 模仿支付宝首页
+
 ## 效果图
+
 * 效果一：主功能区在屏幕下方
 ![](http://note.youdao.com/yws/public/resource/cabb7d1f36a181acc60f44be2f714a52/xmlnote/WEBRESOURCE37ea512c835795c6c5a3b0628b4e9647/3304)
 
@@ -8,6 +10,7 @@
 
 
 ## 页面组成
+
 ### 效果一
 * 整个页面主要由三个view构成：
  	1. tableView：整个页面的基础（效果图中蓝色部分）
@@ -15,13 +18,13 @@
  	3. fixedView：主功能区域，位于屏幕下方（效果图中黄色部分）
 
 * tableView
-	* headerView是由一个透明的、高度与movedView一致的view构成。并且在headerView上添加了一个refreshView用于展示刷新效果
-	* footerView是由一个透明的、高度是fixedView一半的view构成。主要是为了防止fixedView遮挡了tableView的内容
+	* tableHeaderView是由一个透明的、高度与movedView一致的view构成。并且在headerView上添加了一个refreshView用于展示刷新效果
+	* tableFooterView是由一个透明的、高度是fixedView一半的view构成。主要是为了防止fixedView遮挡了tableView的内容
 	* 通过设置scrollIndicatorInsets来修改滚动条的位置
 
 * movedView
 	* 添加在tableView上
-	* 高度与tableView的headerView一致，刚好将headerView上的refreshView遮挡住
+	* 高度与tableHeaderView一致，刚好将refreshView遮挡住
 
 * fixedView
 	* 添加在控制器页面上
@@ -31,7 +34,8 @@
 页面组成基本与效果一一致，只是各个view的大小和位置有所差异
 
 ## 交互效果
-效果一和效果二的交互效果类似，因此以效果一为例。主要交互效果在tableView的代理方法`- (void)scrollViewDidScroll:(UIScrollView *)scrollView; `中实现
+效果一和效果二的交互效果类似，因此以效果一为例。
+主要的交互效果是在代理方法`- (void)scrollViewDidScroll:(UIScrollView *)scrollView; `中实现的
 
 ### 当`scrollView.contentOffset.y>=0`时
 * movedView要随着tableView一起滑动。由于movedView是添加在tableView上的，因此只要保持movedView的frame不变即可实现：
@@ -111,7 +115,7 @@ if(scrollView.contentOffset.y<-60 && [scrollView isDecelerating]) {
 ```
 
 ### 其他
-* 为了在滑动结束后使主功能区要么显示大图标，要么小图标，需要在以下代理方法中进行处理：
+* 为了在滑动结束后主功能区的图标显示正常，需要在以下代理方法中进行相应的处理：
 
 ```
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
@@ -142,9 +146,12 @@ if(scrollView.contentOffset.y<-60 && [scrollView isDecelerating]) {
 
 # UITableViewCell删除按钮样式自定义
 ## 方式一
-1. 重写UITableViewCell的`- (void)layoutSubviews;`方法
-2. 通过遍历subViews的方式找到系统原生的删除页面 
-3. 删除原生页面上的删除按钮，并添加自定义样式的删除按钮
+* 思路：找到UITableViewCell的删除页面，重写页面上的删除按钮样式
+* 方法：
+ 	1. 重写UITableViewCell的`- (void)layoutSubviews;`方法，通过遍历subViews的方式找到删除按钮所在的页面UITableViewCellDeleteConfirmationView    
+ 	2. 通过遍历subViews的方式在UITableViewCellDeleteConfirmationView上找到删除按钮并移除
+ 	3. 在UITableViewCellDeleteConfirmationView上添加自定义样式的删除按钮和点击事件
+ 	4. 通过在代理方法`- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath;`中返回多个空格来决定删除按钮的宽度 
 
 ## 方式二  
 1. 在UITableViewCell的contentView上添加scrollView，并在scrollView上添加控件和删除按钮

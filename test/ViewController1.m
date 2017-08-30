@@ -28,7 +28,6 @@
 #define fixedNormalHeight 100
 #define fixedSmallHeight 50
 #define tabBarHeight 49
-#define statusBarHeight 20
 
 @implementation ViewController1
 
@@ -41,10 +40,13 @@
         [_data addObject:model] ;
     }
 
-    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, statusBarHeight, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - tabBarHeight) style:UITableViewStylePlain] ;
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - tabBarHeight) style:UITableViewStylePlain] ;
     _tableView.delegate = self ;
     _tableView.dataSource = self ;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone ;
+    if([_tableView respondsToSelector:@selector(setContentInsetAdjustmentBehavior:)]) {
+        [_tableView setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentNever] ;
+    }
     [self.view addSubview:_tableView] ;
     
     UIView *tablHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, movedHeight + fixedNormalHeight)] ;
@@ -67,7 +69,7 @@
     _movedView.backgroundColor = [UIColor redColor] ;
     [_tableView addSubview:_movedView] ;
     
-    _fixedView = [[UIView alloc] initWithFrame:CGRectMake(0, statusBarHeight, [UIScreen mainScreen].bounds.size.width, fixedNormalHeight)] ;
+    _fixedView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, fixedNormalHeight)] ;
     _fixedView.backgroundColor = [UIColor yellowColor] ;
     [self.view addSubview:_fixedView] ;
  
@@ -166,7 +168,7 @@
         if(tableViewOffSetY <= (fixedNormalHeight-fixedSmallHeight)) {
             CGRect frame = _fixedView.frame ;
             CGFloat height = fixedNormalHeight - tableViewOffSetY ;
-            frame = CGRectMake(0, statusBarHeight, [UIScreen mainScreen].bounds.size.width, height) ;
+            frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, height) ;
             _fixedView.frame = frame ;
             
             //大图标透明度改变的位移范围为(0～0.25)*fixedNormalHeight，小图标透明度改变的位移范围为0.2*fixedNormalHeight～(fixedNormalHeight-fixedSmallHeight)
@@ -177,7 +179,7 @@
             
         }
         else {
-            _fixedView.frame = CGRectMake(0, statusBarHeight, [UIScreen mainScreen].bounds.size.width, fixedSmallHeight) ;
+            _fixedView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, fixedSmallHeight) ;
             [self adjustItems:_bigItems alpha:0.0] ;
             [self adjustItems:_smallItems alpha:1.0] ;
         }
@@ -185,7 +187,7 @@
     else {
         _movedView.frame = CGRectMake(0, tableViewOffSetY, [UIScreen mainScreen].bounds.size.width, movedHeight + fixedNormalHeight) ;
         
-        _fixedView.frame = CGRectMake(0, statusBarHeight, [UIScreen mainScreen].bounds.size.width, fixedNormalHeight) ;
+        _fixedView.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, fixedNormalHeight) ;
         [self adjustItems:_bigItems alpha:1.0] ;
         [self adjustItems:_smallItems alpha:0.0] ;
         

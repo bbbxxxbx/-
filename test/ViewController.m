@@ -29,7 +29,6 @@
 #define fixedNormalHeight 100
 #define fixedSmallHeight 55
 #define tabBarHeight 49
-#define statusBarHeight 20
 
 @implementation ViewController
 
@@ -42,10 +41,15 @@
         [_data addObject:@(index)] ;
     }
     
-    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, statusBarHeight, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - tabBarHeight) style:UITableViewStylePlain] ;
+    _tableView = [[UITableView alloc]initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - tabBarHeight) style:UITableViewStylePlain] ;
     _tableView.delegate = self ;
     _tableView.dataSource = self ;
     _tableView.bounces = YES ;
+    if (@available(iOS 11.0, *)) {
+        [_tableView setContentInsetAdjustmentBehavior:UIScrollViewContentInsetAdjustmentNever] ;
+    } else {
+        self.automaticallyAdjustsScrollViewInsets = NO ;
+    }
     [self.view addSubview:_tableView] ;
     
     //用一个透明的view将tableView的header撑开
@@ -298,7 +302,7 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return @"                  ";//这里空格的长度是删除按钮的长度
+    return @"                  ";//这里空格的长度是删除按钮的宽度
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
