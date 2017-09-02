@@ -3,9 +3,11 @@
 ## 效果图
 
 * 效果一：主功能区在屏幕下方
+
 ![](http://note.youdao.com/yws/public/resource/cabb7d1f36a181acc60f44be2f714a52/xmlnote/WEBRESOURCE37ea512c835795c6c5a3b0628b4e9647/3304)
 
 * 效果二：主功能区在屏幕上方（与支付宝一致）
+
 ![效果二](http://note.youdao.com/yws/public/resource/cabb7d1f36a181acc60f44be2f714a52/xmlnote/WEBRESOURCE36b230c1788d34ce691d66100c193abc/3303)
 
 
@@ -169,48 +171,48 @@ if(scrollView.contentOffset.y<-60 && [scrollView isDecelerating]) {
 		
 		```
 		- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if(scrollView.contentOffset.x > 0) {
-    _deleteBtn.frame = CGRectMake(scrollView.contentOffset.x + ScreenWidth - deleteBtnWidth - margin, 7.5, deleteBtnWidth, CellHeight - 15) ;
-    }
-    else {
+    		if(scrollView.contentOffset.x > 0) {
+    		_deleteBtn.frame = CGRectMake(scrollView.contentOffset.x + ScreenWidth - deleteBtnWidth - margin, 7.5, deleteBtnWidth, CellHeight - 15) ;
+    		}
+    		else {
         _deleteBtn.frame = CGRectMake(ScreenWidth - deleteBtnWidth - margin, 7.5, deleteBtnWidth, CellHeight - 15) ;
-    }
-}
-		```
+    		}
+		}
+	```
 
 * 注意：
 	1. 由于scrollView会吸收触摸事件，为了让tableViewCell能够接收到触摸事件，需要重写scrollView的相关方法：
 	```
 	- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
-    [[self nextResponder] touchesBegan:touches withEvent:event];
-    [super touchesBegan:touches withEvent:event];
-}
--(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
-    [[self nextResponder] touchesMoved:touches withEvent:event];
-    [super touchesMoved:touches withEvent:event];
-}
-- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
-    [[self nextResponder] touchesEnded:touches withEvent:event];
-    [super touchesEnded:touches withEvent:event];
-}
+		[[self nextResponder] touchesBegan:touches withEvent:event];
+    	[super touchesBegan:touches withEvent:event];
+	}
+	-(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    	[[self nextResponder] touchesMoved:touches withEvent:event];
+    	[super touchesMoved:touches withEvent:event];
+	}
+	- (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+    	[[self nextResponder] touchesEnded:touches withEvent:event];
+    	[super touchesEnded:touches withEvent:event];
+	}
 	```	
 	
 	2. 在显示删除按钮的情况下点击tableViewCell需隐藏删除按钮
 	```
 	- (void)clickWithCompletion:(void(^)(void))completion {
-    if(_scrollView.contentOffset.x > 0) {
-        //滑动过程中禁止scrollView的交互，防止重复点击引起的卡顿效果
-        _scrollView.userInteractionEnabled = NO ;
-        [UIView animateWithDuration:0.3 animations:^{
-        [_scrollView setContentOffset:CGPointZero] ;
-        } completion:^(BOOL finished) {
-        _scrollView.userInteractionEnabled = YES ;
-        }] ;
-    }
-    else {
-        completion () ;
-    }
-}
+		if(_scrollView.contentOffset.x > 0) {
+     //滑动过程中禁止scrollView的交互，防止重复点击引起的卡顿效果
+			_scrollView.userInteractionEnabled = NO ;
+			[UIView animateWithDuration:0.3 animations:^{
+				[_scrollView setContentOffset:CGPointZero] ;
+			} completion:^(BOOL finished) {
+				_scrollView.userInteractionEnabled = YES ;
+			}] ;
+   	}
+    	else {
+    		completion () ;
+    	}
+	}
 	```
 	
 	3. 由于UITableViewCell的重用机制，如果某一行cell左滑显示了删除按钮，在此情况下滑动tableView，那么将会在其它行出现显示删除按钮的cell。为了解决该问题，需要创建一个对象来记录每个cell删除按钮的显示情况
