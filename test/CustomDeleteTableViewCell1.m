@@ -77,6 +77,7 @@ static const CGFloat margin = 15.0 ;
 - (void)clickWithCompletion:(void(^)(void))completion {
     _model.showDeleting = NO ;
     if(_scrollView.contentOffset.x > 0) {
+        //滑动过程中禁止scrollView的交互，防止重复点击引起的卡顿效果
         _scrollView.userInteractionEnabled = NO ;
         [UIView animateWithDuration:0.3 animations:^{
             [_scrollView setContentOffset:CGPointZero] ;
@@ -88,6 +89,7 @@ static const CGFloat margin = 15.0 ;
         completion () ;
     }
 }
+
 - (void)hideDeleteBtn {
     _model.showDeleting = NO ;
     if(_scrollView.contentOffset.x > 0) {

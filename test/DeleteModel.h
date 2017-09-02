@@ -10,6 +10,6 @@
 
 @interface DeleteModel : NSObject
 
-@property (nonatomic, assign) BOOL showDeleting ;
+@property (nonatomic, assign) BOOL showDeleting ; //用于记录自定义cell中删除按钮的显示情况，默认为NO
 
 @end
