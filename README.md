@@ -148,26 +148,37 @@ if(scrollView.contentOffset.y<-60 && [scrollView isDecelerating]) {
 
 # UITableViewCell删除按钮样式自定义
 ## 方式一
-* 思路：找到UITableViewCell的删除页面，重写页面上的删除按钮样式
-* 方法：
- 	1. 重写UITableViewCell的`- (void)layoutSubviews;`方法，通过遍历subViews的方式找到删除按钮所在的页面UITableViewCellDeleteConfirmationView    
- 	2. 通过遍历subViews的方式在UITableViewCellDeleteConfirmationView上找到删除按钮并移除
- 	3. 在UITableViewCellDeleteConfirmationView上添加自定义样式的删除按钮和点击事件
- 	4. 通过控制代理方法`- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath;`中返回空格的个数来决定删除按钮的宽度
- 	5. 需要实现代理方法`- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath;`，就算没有具体内容也可以
-* 优点：由于只是修改了样式，因此相关的交互效果与系统的一致
-* 局限性：删除按钮的样式有一定的局限性，并且在iOS11上，UITableViewCell删除按钮的实现形式从根本上有了改变，该方法失效 
+### 思路
+找到UITableViewCell的删除页面，重写页面上的删除按钮样式
+### 方法
+1. 重写UITableViewCell的`- (void)layoutSubviews;`方法，通过遍历subViews的方式找到删除按钮所在的页面UITableViewCellDeleteConfirmationView    
+2. 通过遍历subViews的方式在UITableViewCellDeleteConfirmationView上找到删除按钮并移除
+3. 在UITableViewCellDeleteConfirmationView上添加自定义样式的删除按钮和点击事件
+4. 通过控制代理方法`- (NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath;`中返回空格的个数来决定删除按钮的宽度
+5. 需要实现代理方法`- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath;`，就算没有具体内容也可以
+
+### 优点
+由于只是修改了样式，因此相关的交互效果与系统的一致
+### 局限性
+删除按钮的样式有一定的局限性，并且在iOS11上，UITableViewCell删除按钮的实现形式从根本上有了改变，该方法失效 
 
 ## 方式二  
-* 思路：自定义UITableViewCell
-* 方法：
-	1. 为了尽量与系统的交互效果保持一致（即滑动删除），自定义UITableViewCell的主体控件是UIScrollView	
-	2. 所有其它的控件，包括自定义的删除按钮都是添加在这个scrollView上的
-	3. 为了滑动后有足够的空间显示删除按钮，将scrollView的contentSize设置为`CGSizeMake(ScreenWidth + deleteBtnWidth + margin, CellHeight)`
-	4. 删除按钮的处理方式有两种：
-		1. 添加在屏幕之外，固定在scrollView上，会随着scrollView的滑动而逐渐显示在屏幕上
-		2. 添加在屏幕之内，被另一个页面遮盖住。遮盖它的页面固定在scrollView上，会随着scrollView的滑动逐渐移开；而它在scrollView内的位置会随着scrollView的滑动而不断改变，使其在屏幕上的位置保持不变
-		3. 为了与系统效果更相近，demo选择了方式二
+### 思路
+自定义UITableViewCell
+### 方法
+1. 为了尽量与系统的交互效果保持一致（即滑动删除），自定义UITableViewCell的主体控件是UIScrollView	
+2. 所有其它的控件，包括自定义的删除按钮都是添加在这个scrollView上的
+3. 为了滑动后有足够的空间显示删除按钮，将scrollView的contentSize设置为`CGSizeMake(ScreenWidth + deleteBtnWidth + margin, CellHeight)`
+4. 删除按钮的处理方式有两种：
+ 	1. 添加在屏幕之外，固定在scrollView上，会随着scrollView的滑动而逐渐显示在屏幕上
+	2. 添加在屏幕之内，被另一个页面遮盖住。遮盖它的页面固定在scrollView上，会随着scrollView的滑动逐渐移开；而它在scrollView内的位置会随着scrollView的滑动而不断改变，使其在屏幕上的位置保持不变
+	3. 为了与系统效果更相近，demo选择了方式二
+		```
+		_deleteBtn = [UIButton buttonWithType:UIButtonTypeCustom] ;
+		_deleteBtn.frame = CGRectMake(ScreenWidth - deleteBtnWidth - margin, 7.5, deleteBtnWidth, CellHeight - 15) ;
+		[_deleteBtn addTarget:self action:@selector(deleteCell) forControlEvents:UIControlEventTouchUpInside] ;
+		[_scrollView addSubview:_deleteBtn] ;
+		```
 		
 		```
 		- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
@@ -180,8 +191,8 @@ if(scrollView.contentOffset.y<-60 && [scrollView isDecelerating]) {
 		}
 	```
 
-* 注意：
-	1. 由于scrollView会吸收触摸事件，为了让tableViewCell能够接收到触摸事件，需要重写scrollView的相关方法：
+### 注意
+1. 由于scrollView会吸收触摸事件，为了让tableViewCell能够接收到触摸事件，需要重写scrollView的相关方法：
 	```
 	- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 		[[self nextResponder] touchesBegan:touches withEvent:event];
@@ -197,27 +208,29 @@ if(scrollView.contentOffset.y<-60 && [scrollView isDecelerating]) {
 	}
 	```	
 	
-	2. 在显示删除按钮的情况下点击tableViewCell需隐藏删除按钮
+2. 在显示删除按钮的情况下点击tableViewCell需隐藏删除按钮：
 	```
 	- (void)clickWithCompletion:(void(^)(void))completion {
-		if(_scrollView.contentOffset.x > 0) {
-     //滑动过程中禁止scrollView的交互，防止重复点击引起的卡顿效果
-			_scrollView.userInteractionEnabled = NO ;
-			[UIView animateWithDuration:0.3 animations:^{
-				[_scrollView setContentOffset:CGPointZero] ;
-			} completion:^(BOOL finished) {
-				_scrollView.userInteractionEnabled = YES ;
-			}] ;
-   	}
-    	else {
-    		completion () ;
-    	}
-	}
+    if(_scrollView.contentOffset.x > 0) {
+    //滑动过程中禁止scrollView的交互，防止重复点击引起的卡顿效果
+        _scrollView.userInteractionEnabled = NO ;
+        [UIView animateWithDuration:0.3 animations:^{
+            [_scrollView setContentOffset:CGPointZero] ;
+        } completion:^(BOOL finished) {
+            _scrollView.userInteractionEnabled = YES ;
+        }] ;
+    }
+    else {
+        completion () ;
+     }
+}
 	```
 	
-	3. 由于UITableViewCell的重用机制，如果某一行cell左滑显示了删除按钮，在此情况下滑动tableView，那么将会在其它行出现显示删除按钮的cell。为了解决该问题，需要创建一个对象来记录每个cell删除按钮的显示情况
+3. 由于UITableViewCell的重用机制，如果某一行cell左滑显示了删除按钮，在此情况下滑动tableView，那么将会在其它行出现显示删除按钮的cell。为了解决该问题，需要创建一个对象来记录每个cell删除按钮的显示情况
 
-* 优点：删除按钮的样式能够完全自定义，不受系统的限制
-* 局限性：交互效果与系统的相比有所差异
+### 优点
+删除按钮的样式能够完全自定义，不受系统的限制
+### 局限性
+交互效果与系统的相比有所差异
 
 
