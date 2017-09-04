@@ -223,7 +223,7 @@ if(scrollView.contentOffset.y<-60 && [scrollView isDecelerating]) {
     else {
         completion () ;
      }
-}
+	}
 	```
 	
 3. 由于UITableViewCell的重用机制，如果某一行cell左滑显示了删除按钮，在此情况下滑动tableView，那么将会在其它行出现显示删除按钮的cell。为了解决该问题，需要创建一个对象来记录每个cell删除按钮的显示情况
