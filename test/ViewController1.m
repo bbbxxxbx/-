@@ -28,6 +28,7 @@
 #define fixedNormalHeight 100
 #define fixedSmallHeight 50
 #define tabBarHeight 49
+#define refreshHeight 50
 
 @implementation ViewController1
 
@@ -49,15 +50,15 @@
     }
     [self.view addSubview:_tableView] ;
     
-    UIView *tablHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, movedHeight + fixedNormalHeight)] ;
-    tablHeaderView.backgroundColor = [UIColor clearColor] ;
-    _tableView.tableHeaderView = tablHeaderView ;
+    UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, movedHeight + fixedNormalHeight)] ;
+    tableHeaderView.backgroundColor = [UIColor clearColor] ;
+    _tableView.tableHeaderView = tableHeaderView ;
     
     _tableView.scrollIndicatorInsets = UIEdgeInsetsMake(movedHeight + fixedNormalHeight, 0, 0, 0) ;
     
-    _refreshView = [[UIView alloc]initWithFrame:CGRectMake(0, movedHeight + fixedNormalHeight - 50, [UIScreen mainScreen].bounds.size.width , 50)] ;
+    _refreshView = [[UIView alloc]initWithFrame:CGRectMake(0, movedHeight + fixedNormalHeight - refreshHeight, [UIScreen mainScreen].bounds.size.width , refreshHeight)] ;
     _refreshView.backgroundColor = [UIColor whiteColor] ;
-    UILabel *tip = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 50)] ;
+    UILabel *tip = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, refreshHeight)] ;
     tip.text = @"刷新动画" ;
     tip.textColor = [UIColor blackColor] ;
     tip.font = [UIFont systemFontOfSize:14] ;
@@ -191,9 +192,9 @@
         [self adjustItems:_bigItems alpha:1.0] ;
         [self adjustItems:_smallItems alpha:0.0] ;
         
-        if(tableViewOffSetY<-60 && [scrollView isDecelerating]) {
+        if(tableViewOffSetY<-refreshHeight-10 && [scrollView isDecelerating]) {
             [self requird] ;
-            [self.tableView setContentOffset:CGPointMake(0, -50) animated:YES] ;
+            [self.tableView setContentOffset:CGPointMake(0, -refreshHeight) animated:YES] ;
         }
     }
 }

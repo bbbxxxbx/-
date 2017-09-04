@@ -29,6 +29,7 @@
 #define fixedNormalHeight 100
 #define fixedSmallHeight 55
 #define tabBarHeight 49
+#define refreshHeight 50
 
 @implementation ViewController
 
@@ -66,9 +67,9 @@
     _tableView.scrollIndicatorInsets = UIEdgeInsetsMake(movedHeight, 0, 0, 0);
     
     //再在header下方添加一个刷新用的view
-    _refreshView = [[UIView alloc]initWithFrame:CGRectMake(0, movedHeight - 50, [UIScreen mainScreen].bounds.size.width , 50)] ;
+    _refreshView = [[UIView alloc]initWithFrame:CGRectMake(0, movedHeight - refreshHeight, [UIScreen mainScreen].bounds.size.width , refreshHeight)] ;
     _refreshView.backgroundColor = [UIColor whiteColor] ;
-    UILabel *tip = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 50)] ;
+    UILabel *tip = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, refreshHeight)] ;
     tip.text = @"刷新动画" ;
     tip.textColor = [UIColor blackColor] ;
     tip.font = [UIFont systemFontOfSize:14] ;
@@ -238,9 +239,9 @@
         [self adjustItems:_smallItems alpha:0.0] ;
         
         //刷新View
-        if(tableViewoffsetY<-60 && [scrollView isDecelerating]) {
+        if(tableViewoffsetY<-refreshHeight-10 && [scrollView isDecelerating]) {
             [self requird] ;
-            [self.tableView setContentOffset:CGPointMake(0, -50) animated:YES] ;
+            [self.tableView setContentOffset:CGPointMake(0, -refreshHeight) animated:YES] ;
         }
     }
 }
